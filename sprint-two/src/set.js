@@ -1,18 +1,22 @@
-var Set = function() {
+var Set = function () {
   var set = Object.create(setPrototype);
-  set._storage = null; // fix me
+  // Assume this is a Set only for Strings
+  set._storage = {};
   return set;
 };
 
 var setPrototype = {};
 
-setPrototype.add = function(item) {
+setPrototype.add = function (item) {
+  this._storage[item] = 0;
 };
 
-setPrototype.contains = function(item) {
+setPrototype.contains = function (item) {
+  return item in this._storage;
 };
 
-setPrototype.remove = function(item) {
+setPrototype.remove = function (item) {
+  delete this._storage[item];
 };
 
 /*
