@@ -3,7 +3,7 @@ const minLoadFactor = 0.25;
 
 var HashTable = function () {
   this._limit = 8;
-  this._size = 0;
+  this._count = 0;
   this._storage = LimitedArray(this._limit);
 };
 
@@ -14,19 +14,23 @@ HashTable.prototype.insert = function (k, v) {
     this._storage.set(index, new ListNode());
   }
   var curr = this._storage.get(index);
+  var found = false;
   while (curr.next) {
     if (curr.next.key === k) {
       curr.next.value = v;
+      found = true;
       break;
     }
     curr = curr.next;
   }
-  curr.next = new ListNode(k, v);
-  this._size++;
+  if (!found) {
+    curr.next = new ListNode(k, v);
+    this._count++;
+  }
 
-  // Double size if exceed maxLoadFactor
-  if (this._size / this._limit > maxLoadFactor) {
-    this.resize(this._limit * 2);
+  // Double limit if exceed maxLoadFactor
+  if (this._count / this._limit > maxLoadFactor) {
+    this._resize(this._limit * 2);
   }
 };
 
@@ -47,24 +51,24 @@ HashTable.prototype.remove = function (k) {
   while (curr && curr.next) {
     if (curr.next.key === k) {
       curr.next = curr.next.next;
-      this._size--;
+      this._count--;
       break;
     }
     curr = curr.next;
   }
 
-  // Halve size if below minLoadFactor
-  if (this._size / this._limit < minLoadFactor) {
-    this.resize(this._limit / 2);
+  // Halve limit if below minLoadFactor
+  if (this._count / this._limit < minLoadFactor) {
+    this._resize(this._limit / 2);
   }
 };
 
-HashTable.prototype.resize = function (newLimit) {
+HashTable.prototype._resize = function (newLimit) {
   this._limit = newLimit;
   var tempStorage = this._storage;
   this._storage = LimitedArray(this._limit);
-  // NOTE: here need to reset size to 0!!!
-  this._size = 0;
+  // NOTE: here need to reset _count to 0!!!
+  this._count = 0;
   tempStorage.each(
     function (value) {
       var curr = value;
