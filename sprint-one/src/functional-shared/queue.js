@@ -2,7 +2,9 @@ var Queue = function () {
   // Hey! Rewrite in the new style. Your code will wind up looking very similar,
   // but try not not reference your old code in writing the new style.
   var queue = {};
-  queue.storage = {};
+  queue._storage = {};
+  queue._head = 0;
+  queue._tail = 0;
   _.extend(queue, queueMethods);
 
   return queue;
@@ -11,30 +13,18 @@ var Queue = function () {
 var queueMethods = {};
 
 queueMethods.enqueue = function (value) {
-  var storage = this.storage;
-  if (!('head' in storage)) {
-    storage.head = 0;
-    storage.tail = 0;
-  }
-  storage[storage.tail] = value;
-  storage.tail++;
+  this._storage[this._tail++] = value;
 };
 
 queueMethods.dequeue = function () {
-  var storage = this.storage;
-  if (!('head' in storage) || storage.head === storage.tail) {
+  if (!this.size()) {
     return;
   }
-  var res = storage[storage.head];
-  delete storage[storage.head];
-  storage.head++;
+  var res = this._storage[this._head];
+  delete this._storage[this._head++];
   return res;
 };
 
 queueMethods.size = function () {
-  var storage = this.storage;
-  if (!('head' in storage)) {
-    return 0;
-  }
-  return storage.tail - storage.head;
+  return this._tail - this._head;
 };
