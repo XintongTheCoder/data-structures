@@ -3,11 +3,10 @@ var LinkedList = function () {
     head: null,
     tail: null,
   };
-  // list.head = null;
-  // list.tail = null;
 
   list.addToTail = function (value) {
     var newNode = Node(value);
+    console.log(Node);
     if (!list.head) {
       list.head = newNode;
     } else {

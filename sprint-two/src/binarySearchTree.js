@@ -43,6 +43,7 @@ BinarySearchTree.prototype.contains = function (value) {
   }
   return false;
 };
+
 // Iteratively with Stack
 BinarySearchTree.prototype.depthFirstLog = function (cb) {
   // var root = this;
@@ -64,6 +65,21 @@ BinarySearchTree.prototype.depthFirstLog = function (cb) {
   }
   if (this.right) {
     this.right.depthFirstLog(cb);
+  }
+};
+
+BinarySearchTree.prototype.breadthFirstLog = function (cb) {
+  var queue = [];
+  queue.push(this);
+  while (queue.length > 0) {
+    var temp = queue.shift();
+    cb(temp.value);
+    if (temp.left) {
+      queue.push(temp.left);
+    }
+    if (temp.right) {
+      queue.push(temp.right);
+    }
   }
 };
 

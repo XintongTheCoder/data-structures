@@ -40,4 +40,24 @@ describe('tree', function () {
     expect(tree.contains(7)).to.equal(true);
     expect(tree.contains(8)).to.equal(true);
   });
+
+  it('should be able to remove child node from parent', function () {
+    tree.addChild(5);
+    tree.addChild(6);
+    tree.children[0].removeFromParent();
+    expect(tree.contains(5)).to.equal(false);
+    expect(tree.contains(6)).to.equal(true);
+  });
+
+  it('should be able to traverse the all the nodes in the tree', function () {
+    var preorderList = [];
+    var preorderTraversal = function (value) {
+      preorderList.push(value);
+    };
+    tree.value = 4;
+    tree.addChild(5);
+    tree.addChild(6);
+    tree.traverse(preorderTraversal);
+    expect(preorderList).to.eql([4, 5, 6]);
+  });
 });
